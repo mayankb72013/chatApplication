@@ -1,10 +1,52 @@
 "use strict";
-// import { WebSocketServer } from 'ws';
 Object.defineProperty(exports, "__esModule", { value: true });
 const ws_1 = require("ws");
 const wss = new ws_1.WebSocketServer({ port: 8080 });
+const rooms = {};
 wss.on("connection", (socket) => {
     socket.on("message", (message) => {
-        socket.send("hi there");
+        const msg = JSON.parse(message.toString());
+        const type = msg.type;
+        const roomid = msg.payload.roomid;
+        const receivedMessage = msg.payload.message;
+        if (type === "join") {
+            if (!rooms[roomid]) {
+                rooms[roomid] = [];
+            }
+            rooms[roomid].push(socket);
+            rooms[roomid].forEach(s => {
+                if (s.readyState === ws_1.WebSocket.OPEN) {
+                    s.send(JSON.stringify({ roomid: roomid, total: rooms[roomid].length.toString(), msg: "" }));
+                }
+            });
+        }
+        else if (type === "message") {
+            if (receivedMessage != null && receivedMessage.trim() !== "") {
+                rooms[roomid].forEach(s => {
+                    if (s !== socket && s.readyState === ws_1.WebSocket.OPEN) {
+                        s.send(JSON.stringify({ roomid, total: rooms[roomid].length.toString(), msg: receivedMessage }));
+                    }
+                });
+            }
+        }
+        else if (type === "exit") {
+            rooms[roomid] = rooms[roomid].filter(s => s !== socket);
+            socket.close();
+            rooms[roomid].forEach(s => {
+                // if (s.readyState === WebSocket.OPEN) {
+                s.send(JSON.stringify({ roomid: roomid, total: rooms[roomid].length.toString(), msg: "" }));
+                // }
+            });
+        }
+    });
+    socket.on("close", () => {
+        for (const roomid in rooms) {
+            rooms[roomid].forEach(s => {
+                // if (s.readyState === WebSocket.OPEN) {
+                s.send(JSON.stringify({ roomid: roomid, total: rooms[roomid].length.toString(), msg: "" }));
+                // }
+            });
+            rooms[roomid] = rooms[roomid].filter(s => s !== socket);
+        }
     });
 });

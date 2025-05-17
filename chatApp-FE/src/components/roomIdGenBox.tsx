@@ -11,12 +11,13 @@ export default function RoomIdGenBox() {
         roomCode += sourceString[randomIndex];
     }
 
+
     return (
         <>
-            <div className="rounded-md bg-zinc-800 w-full py-4 gap-2 flex justify-center items-center">
-                <div className="flex flex-col justify-center items-center">
+            <div className="rounded-md bg-zinc-800 w-full py-6 gap-2 flex justify-center items-center">
+                <div className="flex flex-col justify-center items-center gap-4">
                     <h3 className="text-neutral-400">Share this code with your friends</h3>
-                    <h2 className="text-3xl">{roomCode}</h2>
+                    <h2 className="tracking-widest text-3xl">{roomCode}</h2>
                 </div>
                 <button onClick={() => { navigator.clipboard.writeText(roomCode) }} className="absolute right-20 border-2 border-neutral-700 rounded-full p-2 cursor-pointer">
                     <CopyIcon></CopyIcon>

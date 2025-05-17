@@ -6,7 +6,7 @@ export interface ButtonProps{
 const sizes = {
     "sm": "px-7 py-2 text-base",
     "md": "px-8 py-2 text-lg",
-    "lg": "px-66 py-3 text-2xl"
+    "lg": "px-72 py-3 text-2xl"
 }
 
 export default function Button({text,size,onClick}: ButtonProps){
