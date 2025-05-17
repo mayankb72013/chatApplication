@@ -4,12 +4,17 @@ import Button from './components/button';
 import InputBox from './components/inputBox';
 import RoomIdGenBox from './components/roomIdGenBox';
 import ChatIcon from './icons/chat';
+import RoomInfoBox from './components/roomInfo';
 
 
 function App() {
 
   const [showRoomCode, setShowRoomCode] = useState(false);
   const [showChatRoom, setShowChatRoom] = useState(false);
+
+  function joinRoom() {
+
+  }
 
   return (
     <div className='bg-black h-screen flex justify-center items-center text-zinc-100 font-mine'>
@@ -29,9 +34,21 @@ function App() {
             </div>
 
             <div className='flex gap-3 justify-center'>
-              <InputBox placeholder='Enter Room Code'></InputBox>
-              <Button text='Join Room' size='md'></Button>
+              <InputBox width='76' placeholder='Enter Room Code'></InputBox>
+              <Button onClick={joinRoom} text='Join Room' size='md'></Button>
             </div>
+          </div>}
+
+          {showChatRoom && <div className='mt-7 '>
+              <RoomInfoBox roomid='E4NIQS' totalUsers='10'></RoomInfoBox>
+              <div className='border-2 rounded-md border-zinc-800 my-3 h-120 '>
+
+              </div>
+            <div className='flex gap-3 justify-center'>
+              <InputBox width='90' placeholder='Type a message...'></InputBox>
+              <Button onClick={joinRoom} text='Send' size='sm'></Button>
+            </div>
+
           </div>}
 
 
